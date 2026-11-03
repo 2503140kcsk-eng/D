@@ -75,3 +75,13 @@ The open task is to formalize the exact source function f—not to prove the ari
 ## 6. No absolute maximum
 
 No greatest finite natural number exists among all numbers definable in unrestricted mathematics: for any N, N+1 is larger. Any “largest googologism” ranking is relative to a restricted language, theory, convention, or catalogue.
+
+
+## 7. Formalization increment (2026-11-03)
+
+The source transcription, exact symbol tuples, least-fresh-variable convention, capture-avoiding substitution, prime indexing, sequence Encode, and its injectivity proof are recorded in [godel-formalization-audit.md](godel-formalization-audit.md). Lean modules added on the review branch:
+
+- `HakuiKoyori/GodelSyntax.lean`
+- `HakuiKoyori/GodelCode.lean`
+
+The Encode proof extracts the sequence length from the exponent of 2 and each element from the exponent of its indexed prime. This uses the source convention `p_0=2`, with the first element encoded using `p_1=3`. The AST/string grammar equivalence, `Formalise`, `Code`, Henkin schema, structures/satisfaction, `U1`–`U3`, `CNF`, and the source-semantic Garden function remain open. The new branch is pending GitHub Actions; the previous main-branch CI result does not certify these added modules.
