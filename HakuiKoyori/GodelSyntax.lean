@@ -259,8 +259,11 @@ def Formula.thetaFree : Formula → Prop
 termination_by p => sizeOf p
 decreasing_by all_goals simp_wf
 
-/-- Formula-minus as a subtype, retaining the original formula and side-condition. -/
-abbrev FormulaMinus := { P : Formula // P.thetaFree }
+/-- Valid object-language formulas, excluding malformed arity nodes. -/
+abbrev WellFormedFormula := { P : Formula // P.WellFormed }
+
+/-- Formula-minus: valid formulas in which the special symbol Theta is absent. -/
+abbrev FormulaMinus := { P : Formula // P.WellFormed ∧ P.thetaFree }
 
 end Godel
 end HakuiKoyori
