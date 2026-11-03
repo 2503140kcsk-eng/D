@@ -268,7 +268,9 @@ def Formula.thetaFree : Formula → Prop
   | .rel _ args => ∀ t ∈ args, t.thetaFree
 termination_by p => sizeOf p
 decreasing_by
-  all_goals omega
+  all_goals
+    simp_wf
+    omega
 
 /-- Valid object-language formulas, excluding malformed arity nodes. -/
 abbrev WellFormedFormula := { P : Formula // P.WellFormed }
