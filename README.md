@@ -4,7 +4,7 @@
 
 - Project title: **Hakui Koyori Number**
 - Repository: https://github.com/2503140kcsk-eng/D
-- Status: **Phase 1 — universal comparison construction written; CI verification in progress**
+- Status: **Phase 1 — Lean build and axiom audit passed (2026-11-03); source LNGN semantics remain open**
 - Audit baseline: 2026-11-03
 
 > Independent fan-inspired mathematics project. It is not affiliated with or endorsed by Cover Corp. or Hololive.
@@ -125,8 +125,10 @@ These projects are assigned complementary roles as references and possible indep
 
 - Lean 4 and mathlib4 versions are pinned by lean-toolchain and lake-manifest.json.
 - CI uses GitHub-hosted runners when available.
-- CI enables nanoda with sorry disabled and axiom-audit.
-- A green workflow is not treated as proof unless its logs show the intended library was actually built and the independent checks ran.
+- The 2026-11-03 code verification run completed `lake build` successfully (1,972 build jobs) and passed `axiom-audit` on 41 declarations in the `HakuiKoyori` namespace.
+- The axiom audit allowed only the standard foundational axioms `propext`, `Classical.choice`, and `Quot.sound`; no project-specific admitted theorem or `sorryAx` was accepted.
+- The current workflow does not claim a successful `nanoda` or `leanchecker` run; those optional independent checker steps are not enabled.
+- Evidence: [GitHub Actions run 41563621259](https://github.com/2503140kcsk-eng/D/actions/runs/41563621259).
 - No paid APIs or services are required for the proof core.
 
 ## Project files
