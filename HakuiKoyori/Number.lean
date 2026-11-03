@@ -1,4 +1,7 @@
-import Mathlib
+import Mathlib.Data.Nat.Basic
+import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.Positivity
+import Mathlib.Tactic.Ring
 
 /-!
 # Hakui Koyori Number — arithmetic core
@@ -25,7 +28,7 @@ theorem nat_le_two_pow (n : Nat) : n ≤ 2 ^ n := by
       calc
         n + 1 ≤ 2 ^ n + 1 := Nat.add_le_add_right ih 1
         _ ≤ 2 ^ n + 2 ^ n := by
-          omega
+          nlinarith [hpos]
         _ = 2 ^ (n + 1) := by
           rw [pow_succ]
           ring
@@ -56,6 +59,6 @@ theorem towerAboveBenchmark_gt (gardenBenchmark : Nat) :
   unfold towerAboveBenchmark
   have h := sparkIteration_ge_seed
     (gardenBenchmark + 2) (gardenBenchmark + 1)
-  omega
+  nlinarith [h]
 
 end HakuiKoyori
