@@ -274,8 +274,8 @@ MetaCode(P): first encode each ω⁴ symbol tuple, then encode the resulting
 finite sequence of symbol numbers. This follows the two-stage construction
 stated in the original article.
 -/
-noncomputable def metaCode (P : Formula) : Nat :=
-  encodeSequence (P.symbols.map Symbol.metaToken)
+noncomputable def metaCode (P : WellFormedFormula) : Nat :=
+  encodeSequence (P.val.symbols.map Symbol.metaToken)
 
 /-- Empty sequence has code zero under the author's -1 + 2^h product formula. -/
 @[simp] theorem encodeSequence_nil : encodeSequence [] = 0 := by
