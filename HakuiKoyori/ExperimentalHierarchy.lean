@@ -114,7 +114,7 @@ theorem natIterate_strict_of_monotone_majorant
   induction steps with
   | zero =>
       intro h
-      nlinarith [hmax, hab]
+      simp at h
   | succ steps ih =>
       intro h seed
       cases steps with
