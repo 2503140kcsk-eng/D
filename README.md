@@ -1,6 +1,6 @@
 # Hakui Koyori Number（博衣こより数）
 
-**A long-term, Lean-verified googology project inspired by Hakui Koyori's researcher, experiment, and science-girl motifs.**
+**A long-term, Lean-formalized googology project inspired by Hakui Koyori's researcher, experiment, and science-girl motifs.**
 
 - Project title: **Hakui Koyori Number**
 - Repository: https://github.com/2503140kcsk-eng/D
