@@ -1,4 +1,5 @@
 import Mathlib.Data.Nat.Basic
+import Mathlib.Data.Nat.Find
 import Lean.Elab.Tactic.Omega
 
 /-!
@@ -52,16 +53,16 @@ inductive Term where
   | var (index : Nat)
   | const (index : Nat)
   | app (symbol : FunctionSymbol) (args : List Term)
-  deriving DecidableEq, Repr
+  deriving Repr
 
 /-- Raw formulas in the source's primitive logical vocabulary. -/
 inductive Formula where
   | bot
   | imp (left right : Formula)
   | neg (body : Formula)
-  | exists (variable : Nat) (body : Formula)
+  | exists (binder : Nat) (body : Formula)
   | rel (symbol : RelationSymbol) (args : List Term)
-  deriving DecidableEq, Repr
+  deriving Repr
 
 /-- The exact arity and recursive well-formedness condition for terms. -/
 def Term.WellFormed : Term → Prop
@@ -86,7 +87,8 @@ def Term.varIndices : Term → List Nat
   | .const _ => []
   | .app _ args => args.flatMap Term.varIndices
 termination_by t => sizeOf t
-decreasing_by all_goals simp_wf
+decreasing_by
+  exact Nat.lt_trans (List.sizeOf_lt_of_mem h) (by simp +arith)
 
 /--
 All variable-symbol indices occurring in a formula, including bound and free
@@ -100,7 +102,11 @@ def Formula.varIndices : Formula → List Nat
   | .exists i p => i :: p.varIndices
   | .rel _ args => args.flatMap Term.varIndices
 termination_by p => sizeOf p
-decreasing_by all_goals simp_wf
+decreasing_by
+  all_goals
+    first
+    | exact Nat.lt_trans (List.sizeOf_lt_of_mem h) (by simp +arith)
+    | simp_wf
 
 /-- A recursive maximum for a finite list of natural numbers. -/
 def listMax : List Nat → Nat
@@ -162,7 +168,8 @@ def Term.renameVar (old fresh : Nat) : Term → Term
   | .const i => .const i
   | .app f args => .app f (args.map (fun a => a.renameVar old fresh))
 termination_by t => sizeOf t
-decreasing_by all_goals simp_wf
+decreasing_by
+  exact Nat.lt_trans (List.sizeOf_lt_of_mem h) (by simp +arith)
 
 /--
 Rename free occurrences in a formula. A quantifier binding old blocks
@@ -186,7 +193,8 @@ def Term.subst (x : Nat) (replacement : Term) : Term → Term
   | .const i => .const i
   | .app f args => .app f (args.map (fun a => a.subst x replacement))
 termination_by t => sizeOf t
-decreasing_by all_goals simp_wf
+decreasing_by
+  exact Nat.lt_trans (List.sizeOf_lt_of_mem h) (by simp +arith)
 
 /--
 Fuelled implementation of the source's substitution operation.
@@ -248,7 +256,8 @@ def Term.thetaFree : Term → Prop
   | .app .theta _ => False
   | .app _ args => ∀ t ∈ args, t.thetaFree
 termination_by t => sizeOf t
-decreasing_by all_goals simp_wf
+decreasing_by
+  exact Nat.lt_trans (List.sizeOf_lt_of_mem h) (by simp +arith)
 
 def Formula.thetaFree : Formula → Prop
   | .bot => True
