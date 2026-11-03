@@ -185,8 +185,7 @@ def Formula.renameFree (old fresh : Nat) : Formula → Formula
 termination_by p => sizeOf p
 decreasing_by
   all_goals
-    simp_wf
-    omega
+    simp_wf <;> omega
 
 /-- Capture-avoiding substitution on terms. -/
 def Term.subst : Term → Nat → Term → Term
@@ -196,7 +195,7 @@ def Term.subst : Term → Nat → Term → Term
       .app f (args.map (fun a => a.subst x replacement))
 termination_by t _ _ => sizeOf t
 decreasing_by
-  exact Nat.lt_trans (List.sizeOf_lt_of_mem h) (by simp +arith)
+  exact Nat.lt_trans (List.sizeOf_lt_of_mem (by assumption)) (by simp +arith)
 
 /--
 Fuelled implementation of the source's substitution operation.
@@ -226,7 +225,7 @@ noncomputable def Formula.substFuel : Nat → Formula → Nat → Term → Formu
       else
         .exists y (substFuel n body x t)
 termination_by fuel _ _ _ => fuel
-decreasing_by all_goals simp_wf
+decreasing_by all_goals simp_wf <;> omega
 
 /-- The source's capture-avoiding substitution operation. -/
 noncomputable def Formula.subst (P : Formula) (x : Nat) (replacement : Term) : Formula :=
@@ -259,7 +258,7 @@ def Term.thetaFree : Term → Prop
   | .app _ args => ∀ t ∈ args, t.thetaFree
 termination_by t => sizeOf t
 decreasing_by
-  exact Nat.lt_trans (List.sizeOf_lt_of_mem h) (by simp +arith)
+  exact Nat.lt_trans (List.sizeOf_lt_of_mem (by assumption)) (by simp +arith)
 
 def Formula.thetaFree : Formula → Prop
   | .bot => True
