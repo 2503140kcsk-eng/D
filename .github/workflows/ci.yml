@@ -20,3 +20,4 @@ jobs:
           nanoda: true
           nanoda-allow-sorry: false
           axiom-audit: true
+          axiom-audit-root: HakuiKoyori
