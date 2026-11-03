@@ -1,5 +1,5 @@
 import Mathlib.Data.Nat.Basic
-import Mathlib.Tactic.Omega
+import Lean.Elab.Tactic.Omega
 
 /-!
 # Exact object-language syntax and substitution for the LNGN source
