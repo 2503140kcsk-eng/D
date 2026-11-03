@@ -80,7 +80,7 @@ theorem koyoriSparkTransform_gt (gardenFunction : Nat → Nat) (n : Nat) :
     gardenFunction n ≤ prefixMaximum gardenFunction n + n + 2 := hmargin
     _ ≤ 2 ^ (prefixMaximum gardenFunction n + n + 2) := hpow
     _ < 2 ^ (prefixMaximum gardenFunction n + n + 2 + 1) := by
-      rw [← hexp]
+      rw [hexp]
       nlinarith [hpos]
 
 /-- The Koyori Spark transform is monotone, regardless of f's behavior. -/
