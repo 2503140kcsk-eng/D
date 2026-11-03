@@ -40,25 +40,20 @@ theorem sparkIteration_ge_seed (seed depth : Nat) :
       simp only [sparkIteration]
       exact le_trans ih (nat_le_two_pow (sparkIteration seed depth))
 
-/--
-The benchmark-relative Hakui Koyori Number.
-
-For a fixed benchmark L, the iteration starts at L+2 and performs L+1
-successive exponentiation stages.
--/
-def hakuiKoyoriNumber (gardenBenchmark : Nat) : Nat :=
+/-- A final exponential tower that strictly exceeds any fixed finite benchmark. -/
+def towerAboveBenchmark (gardenBenchmark : Nat) : Nat :=
   sparkIteration (gardenBenchmark + 2) (gardenBenchmark + 1)
 
-/-- The HKN construction is at least two greater than its benchmark. -/
-theorem hakuiKoyoriNumber_ge (gardenBenchmark : Nat) :
-    gardenBenchmark + 2 ≤ hakuiKoyoriNumber gardenBenchmark := by
+/-- The tower starts at least two above its benchmark. -/
+theorem towerAboveBenchmark_ge (gardenBenchmark : Nat) :
+    gardenBenchmark + 2 ≤ towerAboveBenchmark gardenBenchmark := by
   exact sparkIteration_ge_seed
     (gardenBenchmark + 2) (gardenBenchmark + 1)
 
-/-- Main comparison theorem: HKN(L) is strictly greater than every Nat L. -/
-theorem hakuiKoyoriNumber_gt (gardenBenchmark : Nat) :
-    gardenBenchmark < hakuiKoyoriNumber gardenBenchmark := by
-  unfold hakuiKoyoriNumber
+/-- Main benchmark lemma: the tower is strictly greater than every Nat benchmark. -/
+theorem towerAboveBenchmark_gt (gardenBenchmark : Nat) :
+    gardenBenchmark < towerAboveBenchmark gardenBenchmark := by
+  unfold towerAboveBenchmark
   have h := sparkIteration_ge_seed
     (gardenBenchmark + 2) (gardenBenchmark + 1)
   omega
