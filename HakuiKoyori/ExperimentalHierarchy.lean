@@ -16,7 +16,7 @@ Thus rank 1 is exponentiation, rank 2 is tetration, and so on.
 -/
 def knuthUpArrow (base : Nat) : Nat → Nat → Nat
   | 0, right => base * right
-  | rank + 1, right => Function.iterate (knuthUpArrow base rank) right 1
+  | rank + 1, right => natIterate (knuthUpArrow base rank) right 1
 
 /-- The exact seed appearing in the published LNGN expression 10↑^10 10. -/
 def gardenSeed : Nat := knuthUpArrow 10 10 10
@@ -70,13 +70,17 @@ theorem koyoriSparkTransform_gt (gardenFunction : Nat → Nat) (n : Nat) :
   have hpos :
       0 < 2 ^ (prefixMaximum gardenFunction n + n + 2) := by
     positivity
+  have hexp :
+      2 ^ (prefixMaximum gardenFunction n + n + 2 + 1) =
+        2 ^ (prefixMaximum gardenFunction n + n + 2) * 2 := by
+    rw [pow_succ]
   change gardenFunction n <
     2 ^ (prefixMaximum gardenFunction n + n + 2 + 1)
   calc
     gardenFunction n ≤ prefixMaximum gardenFunction n + n + 2 := hmargin
     _ ≤ 2 ^ (prefixMaximum gardenFunction n + n + 2) := hpow
     _ < 2 ^ (prefixMaximum gardenFunction n + n + 2 + 1) := by
-      rw [pow_succ]
+      rw [← hexp]
       nlinarith [hpos]
 
 /-- The Koyori Spark transform is monotone, regardless of f's behavior. -/
