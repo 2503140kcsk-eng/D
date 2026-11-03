@@ -104,8 +104,7 @@ def Formula.varIndices : Formula → List Nat
 termination_by p => sizeOf p
 decreasing_by
   all_goals
-    simp_wf
-    omega
+    simp_wf <;> omega
 
 /-- A recursive maximum for a finite list of natural numbers. -/
 def listMax : List Nat → Nat
@@ -168,7 +167,7 @@ def Term.renameVar (old fresh : Nat) : Term → Term
   | .app f args => .app f (args.map (fun a => a.renameVar old fresh))
 termination_by t => sizeOf t
 decreasing_by
-  exact Nat.lt_trans (List.sizeOf_lt_of_mem h) (by simp +arith)
+  exact Nat.lt_trans (List.sizeOf_lt_of_mem (by assumption)) (by simp +arith)
 
 /--
 Rename free occurrences in a formula. A quantifier binding old blocks
