@@ -188,11 +188,12 @@ termination_by p => sizeOf p
 decreasing_by all_goals simp_wf
 
 /-- Capture-avoiding substitution on terms. -/
-def Term.subst (x : Nat) (replacement : Term) : Term → Term
-  | .var i => if i = x then replacement else .var i
-  | .const i => .const i
-  | .app f args => .app f (args.map (fun a => a.subst x replacement))
-termination_by t => sizeOf t
+def Term.subst : Term → Nat → Term → Term
+  | .var i, x, replacement => if i = x then replacement else .var i
+  | .const i, _, _ => .const i
+  | .app f args, x, replacement =>
+      .app f (args.map (fun a => a.subst x replacement))
+termination_by t _ _ => sizeOf t
 decreasing_by
   exact Nat.lt_trans (List.sizeOf_lt_of_mem h) (by simp +arith)
 
