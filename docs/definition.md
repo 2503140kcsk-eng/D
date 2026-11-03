@@ -1,78 +1,148 @@
-# Mathematical definition: Hakui Koyori Number
+# Hakui Koyori Number — precise mathematical definition
 
-## 1. Domain
+## 1. Domain and finite recursion
 
-All parameters and values are in the standard natural numbers \(\mathbb N=\{0,1,2,\ldots\}\).
+Let \(\mathbb N=\{0,1,2,\ldots\}\), and let \(f:\mathbb N\to\mathbb N\) be any total function. No monotonicity or computability assumption on \(f\) is needed for the comparison theorem.
 
-Let \(L\in\mathbb N\) be a fixed comparator.
-
-## 2. Koyori Spark iteration
-
-Define \(K_L:\mathbb N\to\mathbb N\) by primitive recursion:
+For \(g:\mathbb N\to\mathbb N\), define its iterate by
 
 \[
-K_L(0)=L+2,
-\]
-\[
-K_L(r+1)=2^{K_L(r)}.
+g^{[0]}(x)=x,\qquad g^{[r+1]}(x)=g(g^{[r]}(x)).
 \]
 
-This is a total finite recursion for every natural input \(r\). It invokes only natural-number addition and exponentiation. There is no limiting process, infinite sum, unbounded search, oracle, or appeal to an undefined function.
+The superscript denotes composition, not ordinary exponentiation.
 
-## 3. Number
+## 2. Knuth-arrow seed
 
-\[
-\boxed{\operatorname{HKN}(L):=K_L(L+1).}
-\]
-
-Equivalently, this is a tower-like iteration with initial seed \(L+2\) and exactly \(L+1\) exponentiation steps.
-
-The project uses “Hakui Koyori Number” for this benchmark-relative construction until a canonical formal natural-number value for the published LNGN comparator is fixed. On instantiation, the intended benchmark is \(L=\operatorname{LNGN}\).
-
-## 4. Proof
-
-First prove by induction on \(n\) that
+Define \(U_0(a,b)=ab\), and recursively
 
 \[
-n\le 2^n.
+U_{r+1}(a,0)=1,\qquad
+U_{r+1}(a,b+1)=U_r(a,U_{r+1}(a,b)).
 \]
 
-- Base case: \(0\le 1\).
-- Inductive step: assume \(n\le 2^n\). Since \(2^n\ge1\),
-  \[
-  n+1\le 2^n+1\le 2^n+2^n=2^{n+1}.
-  \]
-
-Then prove by induction on \(r\) that
+This is a finite recursion on arrow rank and right argument. Put
 
 \[
-L+2\le K_L(r).
+B:=U_{10}(10,10)=10\uparrow^{10}10.
 \]
 
-- At \(r=0\), equality holds.
-- If \(L+2\le K_L(r)\), then
-  \[
-  L+2\le K_L(r)\le 2^{K_L(r)}=K_L(r+1),
-  \]
-  where the second inequality is the first lemma.
+## 3. Garden comparator
 
-Taking \(r=L+1\) gives
+The published comparator is
 
 \[
-L+2\le K_L(L+1)=\operatorname{HKN}(L),
+L_f:=f^{[10]}(B).
 \]
-hence \(L<\operatorname{HKN}(L)\).
 
-The Lean source checks these claims in the project kernel.
+The source's semantic function \(f\) remains an explicit function parameter in the present Lean theorem. Formalizing the source's model hierarchy is a separate obligation recorded in large-number-garden-audit.md.
 
-## 5. Exact scope of the result
+## 4. Koyori running-maximum envelope
 
-The theorem is **uniform**: it holds for every natural number \(L\), independently of how large or how difficult to compute \(L\) is.
+For each \(n\in\mathbb N\), define
 
-It is not yet an unconditional instantiation theorem for LNGN. To obtain that, the LNGN construction must first be shown to denote a fixed natural number under a stated interpretation of its defining theory. If multiple interpretations yield different values, the project must either select and justify one interpretation or publish a family of relative HKN values.
+\[
+M_f(n):=\max_{0\le j\le n}f(j).
+\]
 
-## 6. What “overwhelmingly larger” means here
+This is the maximum of a nonempty finite set of natural numbers, so it exists for every n, even if f is noncomputable.
 
-The formal comparison is strict and robust: the iteration count itself is \(L+1\), and the seed is \(L+2\). The resulting number is therefore an \(L+1\)-stage nested exponentiation, not merely \(L+1\) added to the benchmark.
+Define
 
-The Lean theorem currently certifies the lower bound \(\operatorname{HKN}(L)\ge L+2\). A separate hierarchy-comparison paper may study its exact placement among fast-growing functions; no unsupported claim that it dominates every uncomputable function is made.
+\[
+S_f(n):=2^{M_f(n)+n+3}.
+\]
+
+Two properties hold for every total f:
+
+1. Pointwise strict domination:
+   \[
+   f(n)<S_f(n).
+   \]
+   Proof: set \(t=M_f(n)+n+2\). Since \(f(n)\le M_f(n)\), we have \(f(n)\le t\). The elementary lemma \(t\le2^t\) gives \(f(n)\le2^t\), while \(2^t<2^{t+1}=S_f(n)\).
+
+2. Monotonicity of the majorant:
+   \[
+   a\le b\Longrightarrow M_f(a)\le M_f(b)
+   \Longrightarrow S_f(a)\le S_f(b).
+   \]
+   This remains true even if f itself is not monotone.
+
+## 5. Ten Koyori Spark experiments
+
+Set
+
+\[
+A_f:=S_f^{[10]}(B).
+\]
+
+Because \(S_f\) is monotone and \(f(n)<S_f(n)\) pointwise, induction gives
+
+\[
+f^{[r]}(B)<S_f^{[r]}(B)\qquad(r\ge1).
+\]
+
+For the induction step, if \(f^{[r]}(B)<S_f^{[r]}(B)\), then
+
+\[
+\begin{aligned}
+f^{[r+1]}(B)
+&=f(f^{[r]}(B))\\
+&<S_f(f^{[r]}(B))\\
+&\le S_f(S_f^{[r]}(B))\\
+&=S_f^{[r+1]}(B).
+\end{aligned}
+\]
+
+The middle inequality uses monotonicity of \(S_f\), not f.
+
+In particular,
+
+\[
+L_f=f^{[10]}(B)<A_f.
+\]
+
+## 6. Final tower amplification
+
+Let \(E(x)=2^x\). For \(A\in\mathbb N\), define
+
+\[
+T_A(0)=A+2,\qquad T_A(r+1)=2^{T_A(r)}.
+\]
+
+Define
+
+\[
+\boxed{\operatorname{HKN}(f):=T_{A_f}(A_f+1).}
+\]
+
+Equivalently, exactly \(A_f+1\) exponentiation-by-2 stages are applied, starting at \(A_f+2\).
+
+Every stage satisfies \(x\le2^x\), hence
+
+\[
+A_f+2\le T_{A_f}(A_f+1)
+\]
+
+and therefore \(A_f<\operatorname{HKN}(f)\).
+
+Combining the inequalities:
+
+\[
+\boxed{f^{[10]}(10\uparrow^{10}10)
+<A_f
+<\operatorname{HKN}(f).}
+\]
+
+Thus the theorem proves strict domination of the corresponding Garden comparator for every total \(f:\mathbb N\to\mathbb N\).
+
+## 7. Closed-numeral status
+
+The expression \(\operatorname{HKN}(f)\) is fully specified for every total natural-valued function f. The Lean theorem is universal in f. This is a rigorous parametric construction, not an informal size claim.
+
+A single closed numeral for the published LNGN still requires formally fixing the source's semantic function f and its model hierarchy. The project will not substitute an arbitrary function and call it the source's f.
+
+## 8. Formal source
+
+- HakuiKoyori/Number.lean: the lemma \(t\le2^t\), finite exponentiation iteration, and tower amplifier.
+- HakuiKoyori/ExperimentalHierarchy.lean: Knuth-arrow seed, \(M_f\), \(S_f\), iterate comparison, and HKN theorem.
