@@ -88,7 +88,7 @@ def Term.varIndices : Term → List Nat
   | .app _ args => args.flatMap Term.varIndices
 termination_by t => sizeOf t
 decreasing_by
-  exact Nat.lt_trans (List.sizeOf_lt_of_mem h) (by simp +arith)
+  exact Nat.lt_trans (List.sizeOf_lt_of_mem (by assumption)) (by simp +arith)
 
 /--
 All variable-symbol indices occurring in a formula, including bound and free
@@ -104,9 +104,8 @@ def Formula.varIndices : Formula → List Nat
 termination_by p => sizeOf p
 decreasing_by
   all_goals
-    first
-    | exact Nat.lt_trans (List.sizeOf_lt_of_mem h) (by simp +arith)
-    | simp_wf
+    simp_wf
+    omega
 
 /-- A recursive maximum for a finite list of natural numbers. -/
 def listMax : List Nat → Nat
@@ -134,7 +133,7 @@ theorem listMax_succ_not_mem (xs : List Nat) :
   omega
 
 /-- Existence proof used to define the source's least fresh variable index. -/
-def freshVariableExists (P : Formula) (t : Term) (x : Nat) :
+theorem freshVariableExists (P : Formula) (t : Term) (x : Nat) :
     ∃ i, i ∉ (P.varIndices ++ t.varIndices ++ [x]) := by
   let xs := P.varIndices ++ t.varIndices ++ [x]
   refine ⟨listMax xs + 1, ?_⟩
@@ -185,7 +184,10 @@ def Formula.renameFree (old fresh : Nat) : Formula → Formula
       else .exists y (p.renameFree old fresh)
   | .rel r args => .rel r (args.map (fun t => t.renameVar old fresh))
 termination_by p => sizeOf p
-decreasing_by all_goals simp_wf
+decreasing_by
+  all_goals
+    simp_wf
+    omega
 
 /-- Capture-avoiding substitution on terms. -/
 def Term.subst : Term → Nat → Term → Term
@@ -207,7 +209,7 @@ capture-avoidance convention. If the binder is the target and no renaming is
 needed, substitution stops below that binder because those occurrences are
 not free.
 -/
-def Formula.substFuel : Nat → Formula → Nat → Term → Formula
+noncomputable def Formula.substFuel : Nat → Formula → Nat → Term → Formula
   | 0, P, _, _ => P
   | n + 1, .bot, _, _ => .bot
   | n + 1, .imp p q, x, t =>
@@ -228,13 +230,13 @@ termination_by fuel _ _ _ => fuel
 decreasing_by all_goals simp_wf
 
 /-- The source's capture-avoiding substitution operation. -/
-def Formula.subst (P : Formula) (x : Nat) (replacement : Term) : Formula :=
+noncomputable def Formula.subst (P : Formula) (x : Nat) (replacement : Term) : Formula :=
   substFuel (sizeOf P + 1) P x replacement
 
 /-- Replacing a variable by a term performs the expected operation. -/
 theorem Term.subst_target (x : Nat) (t : Term) :
     (Term.var x).subst x t = t := by
-  rfl
+  simp [Term.subst]
 
 /-- A different variable is unchanged by term substitution. -/
 theorem Term.subst_other {x y : Nat} (h : y ≠ x) (t : Term) :
@@ -244,7 +246,7 @@ theorem Term.subst_other {x y : Nat} (h : y ≠ x) (t : Term) :
 /-- Constants are not altered by variable substitution. -/
 theorem Term.subst_const (x i : Nat) (t : Term) :
     (Term.const i).subst x t = Term.const i := by
-  rfl
+  simp [Term.subst]
 
 /--
 The source's Formula-minus: formulas in which the special unary function
