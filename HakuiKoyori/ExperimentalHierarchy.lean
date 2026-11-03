@@ -1,4 +1,7 @@
-import Mathlib
+import Mathlib.Data.Nat.Basic
+import Mathlib.Tactic.GCongr
+import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.Positivity
 import HakuiKoyori.Number
 
 namespace HakuiKoyori
@@ -65,7 +68,7 @@ theorem koyoriSparkTransform_gt (gardenFunction : Nat → Nat) (n : Nat) :
     le_prefixMaximum gardenFunction n
   have hmargin :
       gardenFunction n ≤ prefixMaximum gardenFunction n + n + 2 := by
-    omega
+    nlinarith [hmax]
   have hpow := nat_le_two_pow (prefixMaximum gardenFunction n + n + 2)
   have hpos :
       0 < 2 ^ (prefixMaximum gardenFunction n + n + 2) := by
@@ -111,7 +114,7 @@ theorem natIterate_strict_of_monotone_majorant
   induction steps with
   | zero =>
       intro h
-      omega
+      nlinarith [hmax, hab]
   | succ steps ih =>
       intro h seed
       cases steps with
@@ -121,7 +124,7 @@ theorem natIterate_strict_of_monotone_majorant
           have hprev :
               natIterate f (steps + 1) seed <
                 natIterate g (steps + 1) seed :=
-            ih (by omega) seed
+            ih (Nat.succ_pos _) seed
           change f (natIterate f (steps + 1) seed) <
             g (natIterate g (steps + 1) seed)
           exact lt_of_lt_of_le
