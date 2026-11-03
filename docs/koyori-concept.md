@@ -39,3 +39,26 @@ The mathematical construction does not claim that the performer or her songs imp
 The running maximum is not decorative: it makes \(S_f\) monotone even when the source function \(f\) is arbitrary. That technical property is what allows the strict comparison proof to work without assuming f is monotone.
 
 The mathematical name “Koyori Spark transformation” is original to this project. It is a metaphor for repeatable, cumulative, amplified experiments, not a claim about official lore or an official Hololive mathematical concept.
+
+
+## Research-lab design update (2026-11-03)
+
+The formalization now has a more concrete laboratory metaphor, grounded in the official profile rather than invented lore:
+
+| Officially described motif | Project component | Mathematical role |
+|---|---|---|
+| Researcher of Secret Society holoX | Source-transcription bench | Freeze the author's exact language and code assignments before experimenting |
+| Research-minded and curious | Symbol reagent catalogue | Inspect each primitive token and its four ordinal coefficients |
+| Human observation / experimentation | Formula assay | Keep syntax, substitution, and model satisfaction as separate test layers |
+| Stream tag `#こより実験中` and 🧪 mark | Experiment/sample labels | Use the source's prime-power code to identify each finite token sequence |
+| Self-described “brains of holoX” | Proof notebook | Make the injectivity argument recover length and entries instead of trusting an encoding claim |
+
+The fresh-variable operation is the contamination-control step: when an inserted term contains a binder's variable, the least unused variable is selected before substitution. The source's `Θ`-free Formula-minus class is a controlled test subset for the Henkin schema.
+
+Cover Corp's 2026-09-12 announcement describes the upcoming 2nd album *Chemical Spark* as having a “理系女子（リケジョ）” concept and announces a 2026-12-02 release. As of this audit date (2026-11-03), that release date is still in the future. This provides an additional official science-themed visual metaphor, but it is not evidence for any mathematical statement.
+
+Official references:
+- Talent profile: https://hololive.hololivepro.com/talents/hakui-koyori
+- *Chemical Spark* announcement: https://hololive.hololivepro.com/news/20260912-02-83/
+
+The project remains an independent fan-inspired mathematics project and is not affiliated with or endorsed by Cover Corp or Hololive.
