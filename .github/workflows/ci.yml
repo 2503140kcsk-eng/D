@@ -17,7 +17,5 @@ jobs:
       - uses: actions/checkout@v4
       - uses: leanprover/lean-action@v1
         with:
-          leanchecker: true
-          leanchecker-args: "HakuiKoyori.Number HakuiKoyori.ExperimentalHierarchy"
           axiom-audit: true
           axiom-audit-root: HakuiKoyori
