@@ -96,7 +96,7 @@ theorem koyoriSparkTransform_monotone (gardenFunction : Nat → Nat) :
   have hexp :
       prefixMaximum gardenFunction a + a + 3 ≤
         prefixMaximum gardenFunction b + b + 3 := by
-    omega
+    nlinarith [hmax, hab]
   gcongr
 
 /--
