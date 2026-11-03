@@ -2,9 +2,11 @@
 
 **A long-term, Lean-formalized googology project inspired by Hakui Koyori's researcher, experiment, and science-girl motifs.**
 
+The current research increment formalizes the quoted first-order syntax, least-fresh-variable substitution, and the source's prime-power Gödel sequence code.
+
 - Project title: **Hakui Koyori Number**
 - Repository: https://github.com/2503140kcsk-eng/D
-- Status: **Phase 1 — Lean build and axiom audit passed (2026-11-03); source LNGN semantics remain open**
+- Status: **Phase 2 — source syntax and Gödel sequence coding implemented on a review branch (2026-11-03); CI and full source semantics remain open**
 - Audit baseline: 2026-11-03
 
 > Independent fan-inspired mathematics project. It is not affiliated with or endorsed by Cover Corp. or Hololive.
@@ -92,7 +94,7 @@ This uses monotonicity of \(S_f\), not monotonicity of \(f\).
 7. Instantiate the parametric theorem with that exact \(f\), giving a closed HKN natural number.
 8. Complete independent type checking, axiom auditing, and mathematical review.
 
-The original author's article does give a detailed syntactic and semantic construction and discusses building a hierarchy using ZFC plus a Grothendieck-universe axiom. We treat those claims as research inputs to formalize, not as already verified Lean results.
+The original author's article gives a detailed syntactic and semantic construction and discusses building a hierarchy using ZFC plus a Grothendieck-universe axiom. The exact transcription, implemented syntax/coding layer, and remaining proof gates are now recorded in [docs/godel-formalization-audit.md](docs/godel-formalization-audit.md). The model-existence and satisfaction claims remain research inputs, not verified Lean results.
 
 ## No absolute largest finite number
 
@@ -127,7 +129,7 @@ These projects are assigned complementary roles as references and possible indep
 - CI uses GitHub-hosted runners when available.
 - The 2026-11-03 code verification run completed `lake build` successfully (1,972 build jobs) and passed `axiom-audit` on 41 declarations in the `HakuiKoyori` namespace.
 - The axiom audit allowed only the standard foundational axioms `propext`, `Classical.choice`, and `Quot.sound`; no project-specific admitted theorem or `sorryAx` was accepted.
-- The current workflow does not claim a successful `nanoda` or `leanchecker` run; those optional independent checker steps are not enabled.
+- The current workflow does not claim a successful `nanoda` or `leanchecker` run; those optional independent checker steps are not enabled. The previous green run covers the pre-Gödel main-branch commit only; the new syntax/coding branch is not green until its pull-request CI completes.
 - Evidence: [GitHub Actions run 41563621259](https://github.com/2503140kcsk-eng/D/actions/runs/41563621259).
 - No paid APIs or services are required for the proof core.
 
@@ -135,6 +137,9 @@ These projects are assigned complementary roles as references and possible indep
 
 - HakuiKoyori/Number.lean — exponentiation iteration and universal tower amplifier.
 - HakuiKoyori/ExperimentalHierarchy.lean — Knuth-arrow seed, running maximum, Koyori Spark transform, and direct comparison theorem.
+- HakuiKoyori/GodelSyntax.lean — source-style term/formula AST, arity predicates, least fresh-variable selection, and capture-avoiding substitution.
+- HakuiKoyori/GodelCode.lean — source ω⁴ symbol tuples, prime-power sequence Encode, its injectivity proof, and two-stage MetaCode.
+- docs/godel-formalization-audit.md — detailed source transcription, exact index conventions, formalization status, and semantic open gates.
 - docs/definition.md — exact mathematical definition.
 - docs/large-number-garden-audit.md — source and semantic audit.
 - Issue #1: https://github.com/2503140kcsk-eng/D/issues/1
