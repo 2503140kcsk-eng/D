@@ -1,7 +1,7 @@
 import Mathlib.Data.Nat.Factorization.Basic
 import Mathlib.Data.Nat.Prime.Nth
 import Mathlib.Data.Nat.PrimeFin
-import Mathlib.Tactic.Omega
+import Lean.Elab.Tactic.Omega
 import HakuiKoyori.GodelSyntax
 
 /-!
